@@ -9,4 +9,10 @@ async function getProducts(minPrice, maxPrice) {
   let url = `https://api.ecommerce.com/products/?minPrice=${minPrice}&&/maxPrice=${maxPrice}`;
   //no-specific API call
   let data = await getApiCall(minPrice, maxPrice);
+
+  if (data.total <= 1000) {
+    data.push(allProducts);
+  } else {
+    let reasonablePrice = minPrice;
+  }
 }

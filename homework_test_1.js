@@ -1,3 +1,14 @@
+// Tvůj úkol:
+// Napiš funkci, která začne na page = 1 a v každém kroku:
+
+// Stáhne data z URL (použij fiktivní funkci getData(url)).
+
+// Podívá se, jestli v těch datech něco je.
+
+// Pokud ano, uloží si to a jde na další stránku (page++).
+
+// Pokud ne (přišlo prázdné pole []), skončí a vypíše celkový počet stažených věcí.
+
 async function getAllPages(maxCountPages) {
   let allPagesData = [];
   for (let startPage = 1; startPage <= maxCountPages; startPage++) {

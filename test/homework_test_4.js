@@ -1,13 +1,30 @@
-// Máš funkci fetchByDate(startDate, endDate), která vrací data z API. Pokud je výsledků víc než 500, musíš ten časový úsek rozdělit na polovinu a zkusit to znovu pro každou polovinu zvlášť.
+async function scrapeData(start, end) {
+  // 1. Musíme počkat na odpověď z API
+  const response = await fetchByDate(start, end);
 
-// Zadání:
+  // Pokud se vejdeme do limitu, vrátíme data z této větve
+  if (response.count <= 500) {
+    // Předpokládám, že data jsou v response.items
+    return response.items;
+  }
 
-// Napiš funkci scrapeData(start, end).
+  // 2. Pokud je jich moc, dělíme
+  // Používáme Math.floor, abychom měli celá čísla
+  let mid = Math.floor((start + end) / 2);
 
-// Zavolej v ní fiktivní API: const response = await fetchByDate(start, end);.
+  // BEZPEČNOSTNÍ POJISTKA: Pokud už rozsah nejde dělit, prostě ty data vrať
+  if (start === end) {
+    return response.items;
+  }
 
-// Pokud response.count (počet nalezených věcí) je menší nebo roven 500, ulož data do pole allResults.
+  // 3. Spustíme rekurzi a POČKÁME na výsledky z obou větví
+  // Aby nevznikaly duplicity, pravá větev začíná na mid + 1
+  const leftResults = await scrapeData(start, mid);
+  const rightResults = await scrapeData(mid + 1, end);
 
-// Pokud je jich víc než 500, vypočítej střed mezi start a end a zavolej funkci znovu pro levou a pravou polovinu.
+  // 4. Spojíme výsledky z obou větví a pošleme je o patro vejš
+  return [...leftResults, ...rightResults];
+}
 
-// Pro jednoduchost: Předpokládej, že start a end jsou celá čísla (třeba roky nebo dny jako timestampy), takže střed vypočítáš jednoduše jako (start + end) / 2.
+// Spuštění
+scrapeData(2010, 2024);
